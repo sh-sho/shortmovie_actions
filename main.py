@@ -18,6 +18,10 @@ _ = load_dotenv(find_dotenv())
 
 app = FastAPI()
 
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
 # Chat AzureOpenAI
 AZURE_OPENAI_ENDPOINT=os.environ["AZURE_OPENAI_ENDPOINT"]
 AZURE_OPENAI_API_KEY=os.environ["AZURE_OPENAI_API_KEY"]
@@ -51,10 +55,6 @@ output_video = 'output_with_audio.mp4'
 tmp_output_video = 'output_with_audio'
 image_directory = SPLIT_MOVIE_DIRECTORY_PATH + "/tmp_horizontal"
 k_num = 10
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
 
 def save_frames_at_intervals(video_path: str, interval_sec: int, output_dir: str, base_filename: str):
     try:
