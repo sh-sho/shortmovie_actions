@@ -12,7 +12,7 @@ import base64
 # import utils as ul
 from dotenv import load_dotenv, find_dotenv
 from fastapi import FastAPI
-import uvicorn
+# import uvicorn
 
 _ = load_dotenv(find_dotenv())
 
