@@ -52,6 +52,10 @@ tmp_output_video = 'output_with_audio'
 image_directory = SPLIT_MOVIE_DIRECTORY_PATH + "/tmp_horizontal"
 k_num = 10
 
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
 def save_frames_at_intervals(video_path: str, interval_sec: int, output_dir: str, base_filename: str):
     try:
         cap = cv2.VideoCapture(video_path)
@@ -256,9 +260,7 @@ def enrich_message(message: str) -> str:
     print(f"Enrich input: {response.content}")
     return response.content
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+
 
 @app.get("/image_to_vector")
 def image_to_vector():
@@ -332,5 +334,5 @@ def vector_search():
     ul.delete_dir(movie_path)
     ul.delete_dir(OUTPUT_DIRECTORY)
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0/0", port=8000, log_level="debug")
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0/0", port=8000, log_level="debug")
