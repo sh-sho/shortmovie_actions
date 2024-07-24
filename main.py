@@ -14,6 +14,7 @@ from langchain_openai import AzureOpenAIEmbeddings, AzureChatOpenAI
 from fastapi import FastAPI
 import uvicorn
 
+
 # _ = load_dotenv(find_dotenv())
 
 app = FastAPI()
