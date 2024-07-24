@@ -12,7 +12,7 @@ import base64
 # import utils as ul
 from dotenv import load_dotenv, find_dotenv
 from fastapi import FastAPI
-# import uvicorn
+import uvicorn
 
 _ = load_dotenv(find_dotenv())
 
@@ -334,5 +334,5 @@ async def root():
 #     ul.delete_dir(movie_path)
 #     ul.delete_dir(OUTPUT_DIRECTORY)
 
-# # if __name__ == "__main__":
-# #     uvicorn.run(app, host="0.0.0.0/0", port=8000, log_level="debug")
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0/0", port=8000, log_level="debug")
