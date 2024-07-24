@@ -10,11 +10,11 @@ import base64
 # from langchain_core.messages import HumanMessage
 # from langchain_openai import AzureOpenAIEmbeddings, AzureChatOpenAI
 # import utils as ul
-from dotenv import load_dotenv, find_dotenv
+# from dotenv import load_dotenv, find_dotenv
 from fastapi import FastAPI
 import uvicorn
 
-_ = load_dotenv(find_dotenv())
+# _ = load_dotenv(find_dotenv())
 
 app = FastAPI()
 
