@@ -9,8 +9,10 @@ azure-storage-blob==12.21.0
 certifi==2024.7.4
 cffi==1.16.0
 charset-normalizer==3.3.2
+click==8.1.7
 cryptography==43.0.0
 decorator==4.4.2
+dill==0.3.8
 distro==1.9.0
 dnspython==2.6.1
 frozenlist==1.4.1
@@ -32,6 +34,7 @@ langchain-text-splitters==0.2.2
 langsmith==0.1.96
 moviepy==1.0.3
 multidict==6.0.5
+multiprocess==0.70.16
 numpy==1.26.4
 openai==1.38.0
 opencv-python==4.10.0.84
@@ -59,4 +62,5 @@ tqdm==4.66.5
 typing_extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.2
+uvicorn
 yarl==1.9.4
