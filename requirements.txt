@@ -37,7 +37,7 @@ multidict==6.0.5
 multiprocess==0.70.16
 numpy==1.26.4
 openai==1.38.0
-opencv-python==4.10.0.84
+opencv-python
 orjson==3.10.6
 packaging==24.1
 pandas==2.2.2
