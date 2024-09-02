@@ -1,3 +1,4 @@
+from datetime import datetime
 import os, time, base64
 import pandas as pd
 import numpy as np
@@ -228,6 +229,10 @@ def generate_movie(images: np.ndarray, step_sec: int) -> None:
     # audio_clip = AudioFileClip(audio_file)
     # audio_clip = audio_clip.subclip(0, final_clip.duration)
     # final_clip = final_clip.set_audio(audio_clip)
+    now = datetime.now()
+    timestamp = now.strftime("%Y%m%d_%H%M%S")
+    output_video = f'output_with_audio_{timestamp}.mp4'
+    final_clip.write_videofile(OUTPUT_DIRECTORY + '/' + output_video, codec='libx264', audio_codec='aac')
     final_clip.write_videofile(OUTPUT_DIRECTORY + '/' + output_video, codec='libx264', audio_codec='aac')
     ul.upload_file(OUTPUT_DIRECTORY, output_video)
     for clip in video_clips:
@@ -314,8 +319,10 @@ def image_to_vector():
     end_time = time.time()
     print(f"Total time: {end_time - start_time}s")
 
-@app.get("/vector_search")
-def vector_search():
+@app.get("/vector_search/{message}")
+def vector_search(
+    message: str
+):
     start_time = time.time()
     ul.dir_check(movie_path, ".mp4")
     ul.dir_check(movie_path, ".MOV")
@@ -323,7 +330,7 @@ def vector_search():
     ul.dir_check(OUTPUT_DIRECTORY, ".mp4")
     
     # message='In the background, there are tall, rugged mountains with some tree cover, enhancing the scenic beauty of the location. The presence of a church tower with a pointed roof adds a historic and cultural touch to the town. The overall scene is serene, capturing the essence of a peaceful lakeside settlement.'
-    message='子供が公園の芝生の上で遊んでいる画像'
+    # message='子供が公園の芝生の上で遊んでいる画像'
     message = enrich_message(message)
     images = vector_search_images(message=message)
     generate_movie(images=images, step_sec=6)
