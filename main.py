@@ -12,7 +12,7 @@ from langchain_core.messages import HumanMessage
 from langchain_openai import AzureOpenAIEmbeddings, AzureChatOpenAI
 import utils as ul
 # from dotenv import load_dotenv, find_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, BackgroundTasks
 import uvicorn
 
 # _ = load_dotenv(find_dotenv())
@@ -265,24 +265,15 @@ def enrich_message(message: str) -> str:
     print(f"Enrich input: {response.content}")
     return response.content
 
-async def hello_world():
-    # time.sleep(10)
-    print('hello')
-    with open('/home/azureuser/output.txt', 'w') as f:
-        f.write("このテキストがファイルに書き込まれます。\n")
-        f.write("2行目のテキストも追加されます。")
-
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
 
 @app.get("/start_image_to_vector")
-async def start_image_to_vector():
-    # image_to_vector()
-    hello_world()
-    return 'success'
+async def start_image_to_vector(background_tasks: BackgroundTasks):
+    background_tasks.add_task(image_to_vector)
+    return {'message': 'success'}
 
-# @app.get("/image_to_vector")
 async def image_to_vector():
     start_time = time.time()
     ul.dir_check(MOVIE_DIRECTORY_PATH, ".mp4")
@@ -344,10 +335,11 @@ async def image_to_vector():
 
 @app.get("/start_vector_search/{message}")
 async def start_vector_search(
-    message: str
+    message: str,
+    background_tasks: BackgroundTasks
 ):
-    vector_search(message=message)
-    return 'success'
+    background_tasks.add_task(vector_search, message)
+    return {'message': 'success'}
 
 async def vector_search(
     message: str
@@ -356,6 +348,7 @@ async def vector_search(
     ul.dir_check(movie_path, ".mp4")
     ul.dir_check(movie_path, ".MOV")
     ul.dir_check(movie_path, ".mov")
+    ul.dir_check('./', '.mp3')
     ul.dir_check(OUTPUT_DIRECTORY, ".mp4")
     
     # message='In the background, there are tall, rugged mountains with some tree cover, enhancing the scenic beauty of the location. The presence of a church tower with a pointed roof adds a historic and cultural touch to the town. The overall scene is serene, capturing the essence of a peaceful lakeside settlement.'
