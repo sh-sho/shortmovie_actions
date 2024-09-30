@@ -5,6 +5,7 @@ import numpy as np
 import re
 from PIL import Image
 from pymongo import MongoClient, IndexModel
+from starlette.middleware.cors import CORSMiddleware
 from moviepy.editor import  VideoFileClip, ColorClip, CompositeVideoClip, concatenate_videoclips
 from moviepy.audio.io.AudioFileClip import AudioFileClip
 from langchain_core.messages import HumanMessage
@@ -17,6 +18,14 @@ import uvicorn
 # _ = load_dotenv(find_dotenv())
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,   # 追記により追加
+    allow_methods=["*"],      # 追記により追加
+    allow_headers=["*"]       # 追記により追加
+)
 
 # Chat AzureOpenAI
 AZURE_OPENAI_ENDPOINT=os.environ["AZURE_OPENAI_ENDPOINT"]
@@ -256,12 +265,25 @@ def enrich_message(message: str) -> str:
     print(f"Enrich input: {response.content}")
     return response.content
 
+async def hello_world():
+    # time.sleep(10)
+    print('hello')
+    with open('/home/azureuser/output.txt', 'w') as f:
+        f.write("このテキストがファイルに書き込まれます。\n")
+        f.write("2行目のテキストも追加されます。")
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
 
-@app.get("/image_to_vector")
-def image_to_vector():
+@app.get("/start_image_to_vector")
+async def start_image_to_vector():
+    # image_to_vector()
+    hello_world()
+    return 'success'
+
+# @app.get("/image_to_vector")
+async def image_to_vector():
     start_time = time.time()
     ul.dir_check(MOVIE_DIRECTORY_PATH, ".mp4")
     ul.download_all_file(directory=MOVIE_DIRECTORY_PATH)
@@ -319,8 +341,15 @@ def image_to_vector():
     end_time = time.time()
     print(f"Total time: {end_time - start_time}s")
 
-@app.get("/vector_search/{message}")
-def vector_search(
+
+@app.get("/start_vector_search/{message}")
+async def start_vector_search(
+    message: str
+):
+    vector_search(message=message)
+    return 'success'
+
+async def vector_search(
     message: str
 ):
     start_time = time.time()
@@ -341,4 +370,4 @@ def vector_search(
     print(f"Total time: {end_time - start_time}s")
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0/0", port=8000, log_level="debug")
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, log_level="debug", reload=True)
